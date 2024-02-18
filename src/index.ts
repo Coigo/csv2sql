@@ -1,13 +1,14 @@
 import { Readable, Transform, Writable } from 'stream'
 import { createReadStream } from 'fs'
 import ReadLine  from 'readline'
-import { prisma } from '../prisma/index'
+import { prisma } from './prisma.js'
 import { pipeline } from 'stream'
 import { promisify } from 'util'
-import { CsvParser } from '../node_modules/csv-parser/index'
+import csv from 'csv-parser'
 
 
 const asyncPipe = promisify(pipeline)
+const transformIntoObject = csv
 const file = 'sinapi_file.csv'
 
 const stream = createReadStream(file)
@@ -22,32 +23,26 @@ const readableStream = new Readable({
     }
 })
 
+const writeToDatabase = new Writable({
+    objectMode: true,
+
+    write: async (data, enc, callBack) => {
+        await prisma.sinapi.create({
+            data: {
+                descricaoDaClasse: data.descricaoDaClasse
+            }
+        })
+        callBack()
+    }
+})
+
 await asyncPipe ([  
-    readableStream 
+    readableStream,
+    transformIntoObject(),
+    writeToDatabase
+
 ])
 
 
 
 
-/**
- 
-    const lines = ReadLine.createInterface({
-            input: stream,
-            crlfDelay: Infinity
-        })
-        
-
-    lines.on('line', async (line) => {
-            const lineTdo = tmp_lineToObject(line) 
-        })
-        
-        let count = 0
-        function tmp_lineToObject (line: string) {
-            if ( count === 0 ) {
-                console.log(line);
-            } 
-            count++         
-            lines.close() 
-    }
- 
- */
