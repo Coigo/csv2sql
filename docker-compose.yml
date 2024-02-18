@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: 'postgres'
+    ports: 
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sinapi
+    volumes:
+      - sinapi:/docker-entrypoint-initdb.d/postgresql
+
+volumes:
+  sinapi:

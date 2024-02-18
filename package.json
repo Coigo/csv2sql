@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "name": "csvtosql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "tsx src/index.ts"
+  },
+  "author": "MrCoigo",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "prisma": "^5.9.1"
+  },
+  "description": "",
+  "devDependencies": {
+    "@prisma/client": "^5.9.1",
+    "@types/node": "^20.11.19",
+    "tsx": "^4.7.1"
+  }
+}
